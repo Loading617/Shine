@@ -1,2 +1,2 @@
 # Shine
-A J2ME Emulator for PC
+A J2ME Emulator for Windows
