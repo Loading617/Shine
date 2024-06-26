@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="Shine.png" width="160" height="160" alt="Shine" />  
+	<img src="Shine.png" width="200" height="200" alt="Shine" />  
 </p>
 
 # Shine
