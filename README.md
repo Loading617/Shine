@@ -3,4 +3,4 @@
 </p>
 
 # Shine - A New J2ME Emulator for Windows and Android!
-A J2ME Emulator for Windows
+A J2ME Emulator for Windows and Android
