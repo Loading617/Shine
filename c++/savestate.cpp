@@ -1,4 +1,5 @@
-#include "j2me save state"
+#include "j2me"
+#include "save state"
 
 public class SaveStateJ2ME {
     private static final int MAX_SAVE_SLOTS = 4;
