@@ -1,4 +1,5 @@
-#include "j2me save game data"
+#include "j2me"
+#include "save game data"
 
 // Define the save game data structure
 
