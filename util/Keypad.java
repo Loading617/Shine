@@ -44,7 +44,7 @@ public class KeypadPanel extends JPanel {
     public KeypadPanel() {
         setLayout(new GridLayout(4, 3));
 
-        buttons = new KeypadButton[20];
+        buttons = new KeypadButton[22];
         
         buttons[0] = new KeypadButton("Left");
         buttons[1] = new KeypadButton("Right");
