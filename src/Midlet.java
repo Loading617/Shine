@@ -29,4 +29,8 @@ public abstract class MIDlet
     }
 
     protected abstract void destroyApp(boolean unconditional) throws MIDletStateChangeException;
-}
+
+    public String getAppProperty(String key)
+    {
+        return Properties.get(key);
+    }
