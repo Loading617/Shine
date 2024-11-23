@@ -34,3 +34,28 @@ public abstract class MIDlet
     {
         return Properties.get(key);
     }
+
+    public static void initAppProperties(HashMap<String, String> initProperties)
+	{
+		properties = initProperties;
+	}
+
+	public final void notifyDestroyed()
+	{ 
+		System.out.println("MIDlet sent Destroyed Notification");
+		System.exit(0);
+	}
+
+	public final void notifyPaused() { }
+
+	protected abstract void pauseApp();
+
+	public final boolean platformRequest(String URL) { return false; }
+
+	public final void resumeRequest() { }
+
+	protected abstract void startApp() throws MIDletStateChangeException;
+
+	public Display getDisplay() { return display; }
+
+}
