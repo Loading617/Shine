@@ -10,8 +10,8 @@ public class Shine extends Application {
         primaryStage.setTitle("Shine");
 
         StackPane root = new StackPane();
-
-        Scene scene = new Scene(root, 400, 300);
+        
+        Scene scene = new Scene(root, 150, 150);
         primaryStage.setScene(scene);
 
         primaryStage.setResizable(false);
