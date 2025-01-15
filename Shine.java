@@ -1,20 +1,21 @@
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class Shine extends Application {
     @Override
     public void start(Stage primaryStage) {
-        
         primaryStage.setTitle("Shine");
-        
-        primaryStage.initStyle(StageStyle.DECORATED);
-        
+
+        StackPane root = new StackPane();
+
+        Scene scene = new Scene(root, 400, 300);
+        primaryStage.setScene(scene);
+
         primaryStage.setResizable(false);
+
         primaryStage.show();
     }
 
