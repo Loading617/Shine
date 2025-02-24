@@ -9,7 +9,9 @@ public class Shine extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Shine");
-
+        
+        Image icon = new Image(getClass().getResourcesAsStream("");
+        
         StackPane root = new StackPane();
         
         Scene scene = new Scene(root, 240, 320);
