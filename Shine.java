@@ -10,7 +10,7 @@ public class Shine extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Shine");
         
-        Image icon = new Image(getClass().getResourcesAsStream("");
+        Image icon = new Image(getClass().getResourceAsStream("/Java/Shine/Shine/Shine.png"));
         
         StackPane root = new StackPane();
         
