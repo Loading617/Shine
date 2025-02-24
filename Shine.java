@@ -24,7 +24,7 @@ public class Shine extends Application {
 
         fileMenu.getItems().addAll(midletItem, recentItem, recordItem, screenshotItem, new SeparatorMenuItem(), exitItem);
 
-        menuBar.getMenus().addAll(fileMenu, editMenu, helpMenu);
+        menuBar.getMenus().addAll(midletMenu, toolsMenu, viewMenu);
 
         VBox root = new VBox(menuBar);
         Scene scene = new Scene(root, 240, 320);
