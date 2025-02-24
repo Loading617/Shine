@@ -12,6 +12,8 @@ public class Shine extends Application {
         
         Image icon = new Image(getClass().getResourceAsStream("/Java/Shine/Shine/Shine.png"));
         
+        primaryStage.getIcons().add(icon);
+        
         StackPane root = new StackPane();
         
         Scene scene = new Scene(root, 240, 320);
