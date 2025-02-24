@@ -1,7 +1,8 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -10,9 +11,24 @@ public class Shine extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Shine");
         
-        Image icon = new Image(getClass().getResourceAsStream("/Java/Shine/Shine/Shine.png"));
+        MenuBar menubar = new MenuBar();
         
-        primaryStage.getIcons().add(icon);
+        Menu midletMenu = new Menu("Midlet");
+        Menu toolsMenu = new Menu("Tools");
+        Menu viewMenu = new Menu("View");
+        
+        MenuItem newItem = new MenuItem("Load jar");
+        MenuItem newItem = new MenuItem("Recent Jarappilcations");
+        MenuItem newItem = new MenuItem("Exit");
+        
+        exitItem.setOnAction(e -> primaryStage.close());
+        
+        fileMenu.getItems().addAll(newItem, openItem, saveItem, new SeparatorMenuItem(), exitItem);
+        
+        menuBar.getMenus().addAll(midletMenu, recent JarappilcationsMenu, viewMenu);
+        
+        VBox root = new VBox(menubar);
+        Scene Scene = new Scene(root, 240, 320);
         
         StackPane root = new StackPane();
         
