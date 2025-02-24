@@ -10,9 +10,9 @@ public class Shine extends Application {
         
         MenuBar menuBar = new MenuBar();
 
-        Menu fileMenu = new Menu("Midlet");
-        Menu editMenu = new Menu("Tools");
-        Menu helpMenu = new Menu("View");
+        Menu midletMenu = new Menu("Midlet");
+        Menu toolsMenu = new Menu("Tools");
+        Menu viewMenu = new Menu("View");
 
         MenuItem midletItem = new MenuItem("Load Jar/Jad File");
         MenuItem recentItem = new MenuItem("Recent");
@@ -22,7 +22,7 @@ public class Shine extends Application {
 
         exitItem.setOnAction(e -> primaryStage.close());
 
-        fileMenu.getItems().addAll(midletItem, recentItem, recordItem, screenshotItem, new SeparatorMenuItem(), exitItem);
+        midletMenu.getItems().addAll(midletItem, recentItem, recordItem, screenshotItem, new SeparatorMenuItem(), exitItem);
 
         menuBar.getMenus().addAll(midletMenu, toolsMenu, viewMenu);
 
