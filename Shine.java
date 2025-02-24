@@ -11,7 +11,7 @@ public class Shine extends Application {
 
         StackPane root = new StackPane();
         
-        Scene scene = new Scene(root, 150, 150);
+        Scene scene = new Scene(root, 240, 320);
         primaryStage.setScene(scene);
 
         primaryStage.setResizable(false);
