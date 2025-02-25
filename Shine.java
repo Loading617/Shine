@@ -3,10 +3,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class Shine extends Application {
     @Override
     public void start(Stage primaryStage) {
+        
+        
         
         MenuBar menuBar = new MenuBar();
 
@@ -19,7 +23,8 @@ public class Shine extends Application {
         MenuItem recordItem = new MenuItem("Record");
         MenuItem screenshotItem = new MenuItem("Screenshot");
         MenuItem exitItem = new MenuItem("Exit");
-
+        
+        
         exitItem.setOnAction(e -> primaryStage.close());
 
         midletMenu.getItems().addAll(midletItem, recentItem, recordItem, screenshotItem, new SeparatorMenuItem(), exitItem);
@@ -34,7 +39,22 @@ public class Shine extends Application {
         primaryStage.setResizable(false);
         primaryStage.show();
     }
-
+public class SystemThemeDetector {
+    public static boolean isDarkMode() {
+        try {
+            Process process = Runtime.getRuntime()
+                    .exec("reg query HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v AppsUseLightTheme");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().endsWith("0")) { 
+                    return true;
+                }
+            }
+        } catch (Exception ignored) {}
+        return false; 
+    }
+}
     public static void main(String[] args) {
         launch(args);
     }
