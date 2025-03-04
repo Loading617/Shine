@@ -16,11 +16,14 @@ public class Shine extends Application {
 
         Menu midletMenu = new Menu("Midlet");
         MenuItem loadItem = new MenuItem("Load JAR");
+        MenuItem recentItem = new MenuItem("Recent");
+        MenuItem recordItem = new MenuItem("Record");
+        MenuItem screenshotItem = new  MenuItem("Screenshot");
         loadItem.setAccelerator(KeyCombination.keyCombination("Ctrl+O"));
         loadItem.setOnAction(e -> openJarFile(primaryStage));
         MenuItem exitItem = new MenuItem("Exit");
         exitItem.setOnAction(e -> primaryStage.close());
-        midletMenu.getItems().addAll(loadItem, new SeparatorMenuItem(), exitItem);
+        midletMenu.getItems().addAll(loadItem, recentItem, recordItem, screenshotItem, new SeparatorMenuItem(), exitItem);
 
         Menu viewMenu = new Menu("View");
         MenuItem fullscreenItem = new MenuItem("Fullscreen");
