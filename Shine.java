@@ -31,7 +31,7 @@ public class Shine extends Application {
         viewMenu.getItems().add(fullscreenItem);
 
         Menu toolsMenu = new Menu("Tools");
-        MenuItem settingsItem = new MenuItem("Settings");
+        MenuItem settingsItem = new MenuItem("Preferences");
         toolsMenu.getItems().add(settingsItem);
 
         menuBar.getMenus().addAll(midletMenu, viewMenu, toolsMenu);
