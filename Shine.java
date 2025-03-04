@@ -15,7 +15,7 @@ public class Shine extends Application {
         MenuBar menuBar = new MenuBar();
 
         Menu fileMenu = new Menu("Midlet");
-        MenuItem openItem = new MenuItem("Load JAR");
+        MenuItem loadItem = new MenuItem("Load JAR");
         openItem.setAccelerator(KeyCombination.keyCombination("Ctrl+O"));
         openItem.setOnAction(e -> openJarFile(primaryStage));
         MenuItem exitItem = new MenuItem("Exit");
