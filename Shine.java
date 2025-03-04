@@ -14,13 +14,13 @@ public class Shine extends Application {
         
         MenuBar menuBar = new MenuBar();
 
-        Menu fileMenu = new Menu("Midlet");
+        Menu midletMenu = new Menu("Midlet");
         MenuItem loadItem = new MenuItem("Load JAR");
-        openItem.setAccelerator(KeyCombination.keyCombination("Ctrl+O"));
-        openItem.setOnAction(e -> openJarFile(primaryStage));
+        loadItem.setAccelerator(KeyCombination.keyCombination("Ctrl+O"));
+        loadItem.setOnAction(e -> openJarFile(primaryStage));
         MenuItem exitItem = new MenuItem("Exit");
         exitItem.setOnAction(e -> primaryStage.close());
-        fileMenu.getItems().addAll(openItem, new SeparatorMenuItem(), exitItem);
+        midletMenu.getItems().addAll(loadItem, new SeparatorMenuItem(), exitItem);
 
         Menu viewMenu = new Menu("View");
         MenuItem fullscreenItem = new MenuItem("Fullscreen");
@@ -31,7 +31,7 @@ public class Shine extends Application {
         MenuItem settingsItem = new MenuItem("Settings");
         toolsMenu.getItems().add(settingsItem);
 
-        menuBar.getMenus().addAll(fileMenu, viewMenu, toolsMenu);
+        menuBar.getMenus().addAll(midletMenu, viewMenu, toolsMenu);
 
         BorderPane root = new BorderPane();
         root.setTop(menuBar);
