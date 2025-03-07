@@ -40,7 +40,7 @@ public class Shine extends Application {
         BorderPane root = new BorderPane();
         root.setTop(menuBar);
 
-        Scene scene = new Scene(root, 160, 170);
+        Scene scene = new Scene(root, 139, 205);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.setTitle("Shine");
