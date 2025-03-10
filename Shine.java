@@ -61,7 +61,7 @@ public class Shine extends Application {
         BorderPane root = new BorderPane();
         root.setTop(menuBar);
 
-        Scene scene = new Scene(root, 139, 205);
+        Scene scene = new Scene(root, 157, 209);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.setTitle("Shine");
