@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import javax.sound.sampled.*;
 
 public class ShineSwing {
