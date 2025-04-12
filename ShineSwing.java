@@ -81,6 +81,55 @@ public class ShineSwing {
         viewMenu.addSeparator();
         viewMenu.add(showFPS);
         viewMenu.add(showDebugInfo);
+
+        
+        recentItem.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Recent files feature not implemented yet."));
+    
+for (Component item : screenSizeMenu.getMenuComponents()) {
+    if (item instanceof JMenuItem) {
+        ((JMenuItem) item).addActionListener(e ->
+            JOptionPane.showMessageDialog(frame, "Screen size set to: " + ((JMenuItem) item).getText()));
+    }
+}
+
+for (Component item : orientationMenu.getMenuComponents()) {
+    if (item instanceof JMenuItem) {
+        ((JMenuItem) item).addActionListener(e ->
+            JOptionPane.showMessageDialog(frame, "Orientation set to: " + ((JMenuItem) item).getText()));
+    }
+}
+
+for (Component item : zoomMenu.getMenuComponents()) {
+    if (item instanceof JMenuItem) {
+        ((JMenuItem) item).addActionListener(e ->
+            JOptionPane.showMessageDialog(frame, "Zoom set to: " + ((JMenuItem) item).getText()));
+    }
+}
+
+showKeypad.addActionListener(e -> {
+    boolean selected = showKeypad.isSelected();
+    JOptionPane.showMessageDialog(frame, "Show Keypad: " + selected);
+});
+
+for (Component item : themeMenu.getMenuComponents()) {
+    if (item instanceof JMenuItem) {
+        ((JMenuItem) item).addActionListener(e ->
+            JOptionPane.showMessageDialog(frame, "Theme set to: " + ((JMenuItem) item).getText()));
+    }
+}
+
+showFPS.addActionListener(e -> {
+    boolean selected = showFPS.isSelected();
+    JOptionPane.showMessageDialog(frame, "Show FPS: " + selected);
+});
+
+showDebugInfo.addActionListener(e -> {
+    boolean selected = showDebugInfo.isSelected();
+    JOptionPane.showMessageDialog(frame, "Show Debug Info: " + selected);
+});
+
+settingsItem.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Preferences window not implemented yet."));
+
     
         JMenu toolsMenu = new JMenu("Tools");
         JMenuItem settingsItem = new JMenuItem("Preferences");
