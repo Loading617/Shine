@@ -63,7 +63,6 @@ public class ShineSwing {
         zoomMenu.add(new JMenuItem("Fit to Window"));
 
         JCheckBoxMenuItem showKeypad = new JCheckBoxMenuItem("Show Keypad", true);
-        JCheckBoxMenuItem showSkin = new JCheckBoxMenuItem("Show Phone Skin", false);
 
         JMenu themeMenu = new JMenu("Theme");
         themeMenu.add(new JMenuItem("Light"));
@@ -77,7 +76,6 @@ public class ShineSwing {
         viewMenu.add(zoomMenu);
         viewMenu.addSeparator();
         viewMenu.add(showKeypad);
-        viewMenu.add(showSkin);
         viewMenu.addSeparator();
         viewMenu.add(themeMenu);
         viewMenu.addSeparator();
