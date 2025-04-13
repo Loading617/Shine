@@ -16,221 +16,204 @@ public class ShineSwing {
         SwingUtilities.invokeLater(() -> new ShineSwing().createAndShowGUI());
     }
 
-    private void createAndShowGUI() {
-        JFrame frame = new JFrame("Shine");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(157, 209);
-        frame.setResizable(false);
-
-        JMenuBar menuBar = new JMenuBar();
-
-        JMenu midletMenu = new JMenu("Midlet");
-        JMenuItem loadItem = new JMenuItem("Load JAR");
-        JMenuItem recentItem = new JMenuItem("Recent");
-        JMenuItem recordItem = new JMenuItem("Record");
-        JMenuItem screenshotItem = new JMenuItem("Screenshot");
-        JMenuItem exitItem = new JMenuItem("Exit");
-
-        loadItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
-        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
-
-        loadItem.addActionListener(e -> openJarFile());
-        recordItem.addActionListener(e -> toggleRecording(frame));
-        screenshotItem.addActionListener(e -> takeScreenshot(frame));
-        exitItem.addActionListener(e -> frame.dispose());
-
-        midletMenu.add(loadItem);
-        midletMenu.add(recentItem);
-        midletMenu.add(recordItem);
-        midletMenu.add(screenshotItem);
-        midletMenu.addSeparator();
-        midletMenu.add(exitItem);
-
-        JMenu viewMenu = new JMenu("View");
-
-        JMenu screenSizeMenu = new JMenu("Screen Size");
-        String[] screenSizes = {"128x160", "240x320", "360x640", "Custom…"};
-        for (String size : screenSizes) {
-            JMenuItem item = new JMenuItem(size);
-            item.addActionListener(e -> setScreenSize(size));
-            screenSizeMenu.add(item);
+    public class ShineSwing {
+        private boolean recording = false;
+        private ByteArrayOutputStream audioOut;
+        private TargetDataLine line;
+        private JFrame frame;
+        private JPanel screenPanel;
+        private boolean isPortrait = true;
+        private double zoomFactor = 1.0;
+    
+        public static void main(String[] args) {
+            SwingUtilities.invokeLater(() -> new ShineSwing().createAndShowGUI());
         }
-
-        JMenu orientationMenu = new JMenu("Orientation");
-        String[] orientations = {"Portrait", "Landscape"};
-        for (String ori : orientations) {
-            JMenuItem item = new JMenuItem(ori);
-            item.addActionListener(e -> setOrientation(ori));
-            orientationMenu.add(item);
-        }
-
-        JMenu zoomMenu = new JMenu("Zoom");
-        String[] zooms = {"1x", "2x", "Fit to Window"};
-        for (String z : zooms) {
-            JMenuItem item = new JMenuItem(z);
-            item.addActionListener(e -> setZoom(z));
-            zoomMenu.add(item);
-        }
-
-        JCheckBoxMenuItem showKeypad = new JCheckBoxMenuItem("Show Keypad", true);
-        showKeypad.addActionListener(e -> toggleKeypad(showKeypad.isSelected()));
-
-        JMenu themeMenu = new JMenu("Theme");
-        String[] themes = {"Light", "Dark"};
-        for (String theme : themes) {
-            JMenuItem item = new JMenuItem(theme);
-            item.addActionListener(e -> setTheme(theme));
-            themeMenu.add(item);
-        }
-
-        JCheckBoxMenuItem showFPS = new JCheckBoxMenuItem("Show FPS");
-        showFPS.addActionListener(e -> toggleFPS(showFPS.isSelected()));
-
-        JCheckBoxMenuItem showDebugInfo = new JCheckBoxMenuItem("Show Debug Info");
-        showDebugInfo.addActionListener(e -> toggleDebugInfo(showDebugInfo.isSelected()));
-
-        viewMenu.add(screenSizeMenu);
-        viewMenu.add(orientationMenu);
-        viewMenu.add(zoomMenu);
-        viewMenu.addSeparator();
-        viewMenu.add(showKeypad);
-        viewMenu.addSeparator();
-        viewMenu.add(themeMenu);
-        viewMenu.addSeparator();
-        viewMenu.add(showFPS);
-        viewMenu.add(showDebugInfo);
-
-        JMenu toolsMenu = new JMenu("Tools");
-        JMenuItem settingsItem = new JMenuItem("Preferences");
-        settingsItem.addActionListener(e -> openPreferences());
-        toolsMenu.add(settingsItem);
-
-        menuBar.add(midletMenu);
-        menuBar.add(viewMenu);
-        menuBar.add(toolsMenu);
-
-        frame.setJMenuBar(menuBar);
-        frame.setVisible(true);
-    }
-
-    private void openJarFile() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Load JAR File");
-        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("JAR Files", "jar"));
-
-        int result = fileChooser.showOpenDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            System.out.println("Loaded JAR: " + selectedFile.getAbsolutePath());
-        }
-    }
-
-    private void takeScreenshot(JFrame frame) {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Save Screenshot");
-        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("PNG Files", "png"));
-
-        int result = fileChooser.showSaveDialog(frame);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            try {
-                Robot robot = new Robot();
-                Rectangle screenRect = new Rectangle(frame.getLocationOnScreen(), frame.getSize());
-                BufferedImage capture = robot.createScreenCapture(screenRect);
-                ImageIO.write(capture, "png", file);
-                System.out.println("Screenshot saved: " + file.getAbsolutePath());
-            } catch (AWTException | IOException ex) {
-                ex.printStackTrace();
+    
+        private void createAndShowGUI() {
+            frame = new JFrame("Shine");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setResizable(false);
+    
+            screenPanel = new JPanel();
+            screenPanel.setBackground(Color.BLACK);
+            screenPanel.setPreferredSize(new Dimension(128, 160));
+            frame.add(screenPanel);
+    
+            JMenuBar menuBar = new JMenuBar();
+    
+            JMenu midletMenu = new JMenu("Midlet");
+            JMenuItem loadItem = new JMenuItem("Load JAR");
+            JMenuItem recentItem = new JMenuItem("Recent");
+            JMenuItem recordItem = new JMenuItem("Record");
+            JMenuItem screenshotItem = new JMenuItem("Screenshot");
+            JMenuItem exitItem = new JMenuItem("Exit");
+    
+            loadItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+            exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
+    
+            loadItem.addActionListener(e -> openJarFile());
+            recordItem.addActionListener(e -> toggleRecording(frame));
+            screenshotItem.addActionListener(e -> takeScreenshot(frame));
+            exitItem.addActionListener(e -> frame.dispose());
+    
+            midletMenu.add(loadItem);
+            midletMenu.add(recentItem);
+            midletMenu.add(recordItem);
+            midletMenu.add(screenshotItem);
+            midletMenu.addSeparator();
+            midletMenu.add(exitItem);
+    
+            JMenu viewMenu = new JMenu("View");
+    
+            JMenu screenSizeMenu = new JMenu("Screen Size");
+            String[] screenSizes = {"128x160", "240x320", "360x640", "Custom…"};
+            for (String size : screenSizes) {
+                JMenuItem item = new JMenuItem(size);
+                item.addActionListener(e -> setScreenSize(size));
+                screenSizeMenu.add(item);
             }
-        }
-    }
-
-    private void toggleRecording(Component parent) {
-        if (!recording) {
-            startRecording();
-        } else {
-            stopRecording(parent);
-        }
-    }
-
-    private void startRecording() {
-        new Thread(() -> {
-            try {
-                AudioFormat format = new AudioFormat(44100, 16, 2, true, true);
-                DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
-                if (!AudioSystem.isLineSupported(info)) {
-                    System.out.println("Audio line not supported.");
-                    return;
-                }
-                line = (TargetDataLine) AudioSystem.getLine(info);
-                line.open(format);
-                line.start();
-
-                audioOut = new ByteArrayOutputStream();
-                byte[] buffer = new byte[4096];
-                recording = true;
-                System.out.println("Recording started...");
-
-                while (recording) {
-                    int bytesRead = line.read(buffer, 0, buffer.length);
-                    audioOut.write(buffer, 0, bytesRead);
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+    
+            JMenu orientationMenu = new JMenu("Orientation");
+            String[] orientations = {"Portrait", "Landscape"};
+            for (String ori : orientations) {
+                JMenuItem item = new JMenuItem(ori);
+                item.addActionListener(e -> setOrientation(ori));
+                orientationMenu.add(item);
             }
-        }).start();
-    }
-
-    private void stopRecording(Component parent) {
-        recording = false;
-        line.stop();
-        line.close();
-
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Save Recording");
-        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("WAV Files", "wav"));
-
-        int result = fileChooser.showSaveDialog(parent);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            try (FileOutputStream fos = new FileOutputStream(file)) {
-                fos.write(audioOut.toByteArray());
-                System.out.println("Recording saved: " + file.getAbsolutePath());
-            } catch (IOException e) {
+    
+            JMenu zoomMenu = new JMenu("Zoom");
+            String[] zooms = {"1x", "2x", "Fit to Window"};
+            for (String z : zooms) {
+                JMenuItem item = new JMenuItem(z);
+                item.addActionListener(e -> setZoom(z));
+                zoomMenu.add(item);
+            }
+    
+            JCheckBoxMenuItem showKeypad = new JCheckBoxMenuItem("Show Keypad", true);
+            showKeypad.addActionListener(e -> toggleKeypad(showKeypad.isSelected()));
+    
+            JMenu themeMenu = new JMenu("Theme");
+            String[] themes = {"Light", "Dark"};
+            for (String theme : themes) {
+                JMenuItem item = new JMenuItem(theme);
+                item.addActionListener(e -> setTheme(theme));
+                themeMenu.add(item);
+            }
+    
+            JCheckBoxMenuItem showFPS = new JCheckBoxMenuItem("Show FPS");
+            showFPS.addActionListener(e -> toggleFPS(showFPS.isSelected()));
+    
+            JCheckBoxMenuItem showDebugInfo = new JCheckBoxMenuItem("Show Debug Info");
+            showDebugInfo.addActionListener(e -> toggleDebugInfo(showDebugInfo.isSelected()));
+    
+            viewMenu.add(screenSizeMenu);
+            viewMenu.add(orientationMenu);
+            viewMenu.add(zoomMenu);
+            viewMenu.addSeparator();
+            viewMenu.add(showKeypad);
+            viewMenu.addSeparator();
+            viewMenu.add(themeMenu);
+            viewMenu.addSeparator();
+            viewMenu.add(showFPS);
+            viewMenu.add(showDebugInfo);
+    
+            JMenu toolsMenu = new JMenu("Tools");
+            JMenuItem settingsItem = new JMenuItem("Preferences");
+            settingsItem.addActionListener(e -> openPreferences());
+            toolsMenu.add(settingsItem);
+    
+            menuBar.add(midletMenu);
+            menuBar.add(viewMenu);
+            menuBar.add(toolsMenu);
+    
+            frame.setJMenuBar(menuBar);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        }
+    
+        private void setScreenSize(String size) {
+            Dimension newSize;
+            switch (size) {
+                case "128x160": newSize = new Dimension(128, 160); break;
+                case "240x320": newSize = new Dimension(240, 320); break;
+                case "360x640": newSize = new Dimension(360, 640); break;
+                case "Custom…":
+                    String input = JOptionPane.showInputDialog(frame, "Enter size (WxH):", "Custom Screen Size", JOptionPane.PLAIN_MESSAGE);
+                    if (input != null && input.matches("\\d+x\\d+")) {
+                        String[] parts = input.split("x");
+                        newSize = new Dimension(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+                    } else return;
+                    break;
+                default: return;
+            }
+    
+            screenPanel.setPreferredSize(applyZoomOrientation(newSize));
+            frame.pack();
+        }
+    
+        private void setOrientation(String orientation) {
+            isPortrait = orientation.equals("Portrait");
+            Dimension currentSize = screenPanel.getPreferredSize();
+            screenPanel.setPreferredSize(applyZoomOrientation(currentSize));
+            frame.pack();
+        }
+    
+        private void setZoom(String zoom) {
+            switch (zoom) {
+                case "1x": zoomFactor = 1.0; break;
+                case "2x": zoomFactor = 2.0; break;
+                case "Fit to Window":
+                    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                    Dimension base = new Dimension(128, 160);
+                    zoomFactor = Math.min(screenSize.width / (double) base.width, screenSize.height / (double) base.height) * 0.5;
+                    break;
+            }
+    
+            Dimension currentSize = screenPanel.getPreferredSize();
+            screenPanel.setPreferredSize(applyZoomOrientation(currentSize));
+            frame.pack();
+        }
+    
+        private Dimension applyZoomOrientation(Dimension baseSize) {
+            int w = baseSize.width;
+            int h = baseSize.height;
+            if (!isPortrait) {
+                int temp = w;
+                w = h;
+                h = temp;
+            }
+            return new Dimension((int) (w * zoomFactor), (int) (h * zoomFactor));
+        }
+    
+        private void setTheme(String theme) {
+            try {
+                if (theme.equals("Dark")) {
+                    UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+                } else {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                }
+                SwingUtilities.updateComponentTreeUI(frame);
+                frame.pack();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    
+        private void toggleKeypad(boolean show) {
+            System.out.println("Toggle keypad: " + show);
+        }
+    
+        private void toggleFPS(boolean show) {
+            System.out.println("Show FPS: " + show);
+        }
+    
+        private void toggleDebugInfo(boolean show) {
+            System.out.println("Show Debug Info: " + show);
+        }
+    
+        private void openPreferences() {
+            System.out.println("Preferences dialog would open here.");
+        }
+    
     }
-
-    private void setScreenSize(String size) {
-        System.out.println("Set screen size to: " + size);
-    }
-
-    private void setOrientation(String orientation) {
-        System.out.println("Set orientation to: " + orientation);
-    }
-
-    private void setZoom(String zoom) {
-        System.out.println("Set zoom to: " + zoom);
-    }
-
-    private void toggleKeypad(boolean show) {
-        System.out.println("Toggle keypad: " + show);
-    }
-
-    private void setTheme(String theme) {
-        System.out.println("Set theme: " + theme);
-    }
-
-    private void toggleFPS(boolean show) {
-        System.out.println("Toggle FPS display: " + show);
-    }
-
-    private void toggleDebugInfo(boolean show) {
-        System.out.println("Toggle debug info: " + show);
-    }
-
-    private void openPreferences() {
-        System.out.println("Open preferences window");
-    }
-}
